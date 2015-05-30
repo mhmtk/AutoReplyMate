@@ -49,8 +49,13 @@ public class RuleWidgetProvider extends AppWidgetProvider {
 				rm.setImageViewResource(R.id.widget_backgroundImage, 
 						((rule.getStatus()==1) ? R.drawable.widget_button_green : R.drawable.widget_button_red));
 				//Update the widget text (useful after relaunch)
-				rm.setTextViewText(R.id.widget_button,
-						rule.getName());
+				rm.setTextViewText(R.id.widget_button, rule.getName());
+				Intent onClickIntent = new Intent(context, RuleWidgetProvider.class);
+
+				onClickIntent.setAction(WIDGET_ONCLICK_ACTION);
+				onClickIntent.putExtra("rule_name", rule.getName());
+				onClickIntent.putExtra("widget_ID", appWidgetId);
+				PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(context, appWidgetId, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 				
 			}
 			else {
@@ -81,38 +86,38 @@ public class RuleWidgetProvider extends AppWidgetProvider {
 			dbManager.toggleRuleStatus(ruleName);
 			
 			//documentation and feedback
-			Log.i(logTag, "Rule: " + ruleName + ", wID: " + widgetID + " changed");
+			Log.i(logTag, "Rule: " + ruleName + ", wID: " + widgetID + " status toggled.");
 
-			//Get a dbManager
-			dbManager = new DatabaseManager(context);
-			Rule rule = dbManager.getRule(widgetID);
-
-			RemoteViews rm = new RemoteViews(context.getPackageName(), R.layout.layout_widget);
-
-			Intent onClickIntent = new Intent(context, RuleWidgetProvider.class);
-			onClickIntent.setAction(WIDGET_ONCLICK_ACTION);
-			onClickIntent.putExtra("rule_name", rule.getName());
-			onClickIntent.putExtra("widget_ID", widgetID);
-			PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(context, widgetID, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-			if (rule != null) { //if there's a rule associated with the widgetID
-				//Update the background image to match the status of the rule in the DB
-				rm.setImageViewResource(R.id.widget_backgroundImage,
-						((rule.getStatus()==1) ? R.drawable.widget_button_green : R.drawable.widget_button_red));
-				//Update the widget text (useful after relaunch)
-				rm.setTextViewText(R.id.widget_button,
-						rule.getName());
-
-			}
-			else {
-				Log.w(logTag, "No rule associated with wID " + widgetID);
-				rm.setTextViewText(R.id.widget_button, "ERROR");
-			}
-			AppWidgetManager.getInstance(context).updateAppWidget(widgetID, rm);
-			Log.i(logTag, "Updated " + widgetID);
+//			//Get a dbManager
+//			dbManager = new DatabaseManager(context);
+//			Rule rule = dbManager.getRule(widgetID);
+//
+//			RemoteViews rm = new RemoteViews(context.getPackageName(), R.layout.layout_widget);
+//
+//			Intent onClickIntent = new Intent(context, RuleWidgetProvider.class);
+//			onClickIntent.setAction(WIDGET_ONCLICK_ACTION);
+//			onClickIntent.putExtra("rule_name", rule.getName());
+//			onClickIntent.putExtra("widget_ID", widgetID);
+//			PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(context, widgetID, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//			if (rule != null) { //if there's a rule associated with the widgetID
+//				//Update the background image to match the status of the rule in the DB
+//				rm.setImageViewResource(R.id.widget_backgroundImage,
+//						((rule.getStatus()==1) ? R.drawable.widget_button_green : R.drawable.widget_button_red));
+//				//Update the widget text (useful after relaunch)
+//				rm.setTextViewText(R.id.widget_button,
+//						rule.getName());
+//
+//			}
+//			else {
+//				Log.w(logTag, "No rule associated with wID " + widgetID);
+//				rm.setTextViewText(R.id.widget_button, "ERROR");
+//			}
+//			AppWidgetManager.getInstance(context).updateAppWidget(widgetID, rm);
+//			Log.i(logTag, "Updated " + widgetID);
 
 			//Call for a widget update thru the onUpdate method (faster than broadcasting)
-//			onUpdate(context, AppWidgetManager.getInstance(context), new int[]{widgetID});
+			onUpdate(context, AppWidgetManager.getInstance(context), new int[]{widgetID});
 		}
 	}
 	

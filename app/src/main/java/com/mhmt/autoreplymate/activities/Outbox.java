@@ -35,10 +35,10 @@ public class Outbox extends ActionBarActivity {
 
 
 	private Context context;
-	private DatabaseManager dbManager;
-	private ArrayList<SMS> smsArray;
+	private static DatabaseManager dbManager;
+	private static ArrayList<SMS> smsArray;
 	private OutboxListFragment listFragment;
-	private ArrayAdapter<SMS> adapter;
+	private static ArrayAdapter<SMS> adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class Outbox extends ActionBarActivity {
 		.show();
 	}
 
-	public class OutboxListFragment extends ListFragment {
+	public static class OutboxListFragment extends ListFragment {
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,9 +106,9 @@ public class Outbox extends ActionBarActivity {
 		public void onActivityCreated(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			// Set the list adapter
-			dbManager = new DatabaseManager(context);
+			dbManager = new DatabaseManager(getActivity());
 			smsArray = dbManager.getSMSArray();
-			adapter = new CustomArrayAdapter<SMS>(context, android.R.layout.simple_list_item_1, smsArray);
+			adapter = new CustomArrayAdapter<SMS>(getActivity(), android.R.layout.simple_list_item_1, smsArray);
 			setListAdapter(adapter);
 		}
 

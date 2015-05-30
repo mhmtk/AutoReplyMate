@@ -223,7 +223,7 @@ public class Main extends ActionBarActivity {
 					Intent updateWidgetIntent = new Intent(getApplicationContext(), RuleWidgetProvider.class);
 					updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{wID} ).setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 					getApplicationContext().sendBroadcast(updateWidgetIntent);
-					Log.i(logTag, "Broadcasted " + updateWidgetIntent.toString());			
+					Log.i(logTag, "Broadcasted to update the widget of " + name + " with wID " + wID);
 				}
 				else
 					Log.i(logTag, "Did not broadcast widget update b/c " + name + " has no widget");
