@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import java.util.Arrays;
+
 /**
  * 
  * @author Mehmet Kologlu
@@ -84,7 +86,7 @@ public class RuleWidgetProvider extends AppWidgetProvider {
 			
 			//Change the status of the rule in the database
 			dbManager.toggleRuleStatus(ruleName);
-			
+
 			//documentation and feedback
 			Log.i(logTag, "Rule: " + ruleName + ", wID: " + widgetID + " status toggled.");
 
@@ -129,7 +131,7 @@ public class RuleWidgetProvider extends AppWidgetProvider {
 		super.onDeleted(context, appWidgetIds);
 		dbManager = new DatabaseManager(context);
 
-		Log.i(logTag, "Deleting widget(s) " + appWidgetIds.toString());
+		Log.i(logTag, "Deleting widget(s) " + Arrays.toString(appWidgetIds));
 
 		// Delete widget IDs from DB
 		new Runnable() {
