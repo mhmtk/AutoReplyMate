@@ -58,7 +58,6 @@ public class RuleWidgetProvider extends AppWidgetProvider {
 				onClickIntent.putExtra("rule_name", rule.getName());
 				onClickIntent.putExtra("widget_ID", appWidgetId);
 				PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(context, appWidgetId, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-				
 			}
 			else {
 				Log.w(logTag, "No rule associated with wID " + appWidgetId);
