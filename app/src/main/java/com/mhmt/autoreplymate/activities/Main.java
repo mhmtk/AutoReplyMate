@@ -195,7 +195,7 @@ public class Main extends ActionBarActivity {
 	 * 
 	 * @param name the position of the toggle's item on the list, 0 indexed
 	 * @param position 
-	 * @param isChecked True if toggle is on, false otherwise
+	 * @param status True if toggle is on, false otherwise
 	 */
 	public void onItemToggleClicked(final String name, int position, final boolean status) {
 
@@ -235,9 +235,9 @@ public class Main extends ActionBarActivity {
 	 * onLongClick of each row of the listView, called thru the RuleListViewAdapter.
 	 * 
 	 * Launches a dialog with the rule name, text, and delete and edit options.
-	 * @param position 
+	 * @param position position in the array
 	 * 
-	 * @param mName The name of the rule long clicked on
+	 * @param ruleName The name of the rule long clicked on
 	 * @param text The text of the rule long clicked on
 	 */
 	public void onLongItemClick(final String ruleName, final int position, String text) {
@@ -267,7 +267,7 @@ public class Main extends ActionBarActivity {
 	 * Then refreshes the view thru notifying the ListView adapter
 	 * 
 	 * @param ruleName Name of the rule to be deleted
-	 * @param position 
+	 * @param position position in the array
 	 */
 	public void deleteRule(final String ruleName, int position){
 
