@@ -117,9 +117,9 @@ public class Rule {
 	}
 
 	public String toString() {
-		return name + ":\t" +  ((description.length() <= 30) ? (description) : (description.substring(0, 30) + "...")) + "\n"
-				+ ((text.length() <= 60) ? (text) : (text.substring(0, 60) + "...")) + "\n"
+		return "<b>" + name + "</b>:&ensp;" +  ((description.length() <= 30) ? (description) : (description.substring(0, 30) + "...")) + "<br>"
+				+ "<i>" + ((text.length() <= 60) ? (text) : (text.substring(0, 60) + "...")) + "</i><br>"
 				+ ((getReplyTo() == 0) ? "SMS & Calls" : ((getReplyTo() == 1) ? "SMS" : "Calls"))
-				+ ((onlyContacts == 1) ? "\nContacts Only"  : "");
+				+ ((onlyContacts == 1) ? "<br>Contacts Only"  : "");
 	}
 }
