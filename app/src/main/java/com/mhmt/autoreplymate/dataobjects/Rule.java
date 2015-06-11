@@ -115,7 +115,7 @@ public class Rule {
 	public int getStatus() {
 		return status;
 	}
-	
+
 	public String toString() {
 		return name + ":\t" +  ((description.length() <= 30) ? (description) : (description.substring(0, 30) + "...")) + "\n"
 				+ ((text.length() <= 60) ? (text) : (text.substring(0, 60) + "...")) + "\n"
