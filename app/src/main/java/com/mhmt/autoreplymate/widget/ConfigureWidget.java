@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.mhmt.autoreplymate.database.DatabaseManager;
 import com.mhmt.autoreplymate.dataobjects.Rule;
 import com.mhmt.autoreplymate.R;
+import com.mhmt.autoreplymate.adapters.HTMLTextArrayAdapter;
 
 import android.app.ListActivity;
 import android.app.PendingIntent;
@@ -48,7 +49,7 @@ public class ConfigureWidget extends ListActivity {
 		context = this;
 
 		//populate the list
-		setListAdapter(new ArrayAdapter<Rule>(this, android.R.layout.simple_list_item_1, ruleArray));
+		setListAdapter(new HTMLTextArrayAdapter<Rule>(this, android.R.layout.simple_list_item_1, ruleArray));
 	} //end of onCreate
 	
 	@Override
@@ -57,7 +58,7 @@ public class ConfigureWidget extends ListActivity {
 		final Rule selectedRule = ruleArray.get(position);
 
 		//Log
-		Log.i(logTag, "Widget of rule " + selectedRule.getName() + " with ID "+ id + " clicked.");
+		Log.i(logTag, "Widget of rule " + selectedRule.getName() + " with ID "+ id + " selected.");
 		
 		//Get the intent that launched the activity
 		Intent launchedIntent = getIntent();
