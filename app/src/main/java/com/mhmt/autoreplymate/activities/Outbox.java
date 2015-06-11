@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mhmt.autoreplymate.R;
+import com.mhmt.autoreplymate.adapters.HTMLTextArrayAdapter;
 import com.mhmt.autoreplymate.database.DatabaseManager;
 import com.mhmt.autoreplymate.dataobjects.SMS;
 
@@ -108,48 +109,11 @@ public class Outbox extends ActionBarActivity {
 			// Set the list adapter
 			dbManager = new DatabaseManager(getActivity());
 			smsArray = dbManager.getSMSArray();
-			adapter = new CustomArrayAdapter<SMS>(getActivity(), android.R.layout.simple_list_item_1, smsArray);
+			adapter = new HTMLTextArrayAdapter<SMS>(getActivity(), android.R.layout.simple_list_item_1, smsArray);
 			setListAdapter(adapter);
 		}
 
 		public void onListItemClick(ListView listView, View view, int position, long id) {
 		}
-
-		private class CustomArrayAdapter<T> extends ArrayAdapter<T> {
-
-			int mResource;
-			LayoutInflater mInflater;
-			public CustomArrayAdapter(Context context, int resource,
-					List<T> objects) {
-				super(context, resource, objects);
-				mResource = resource;
-				mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			}
-			@Override
-			public View getView(int position, View convertView, ViewGroup parent) {
-				View view;
-				TextView text;
-				if (convertView == null) {
-
-					view = mInflater.inflate(mResource, parent, false);
-				} else {
-					view = convertView;
-				}
-				try {
-					text = (TextView) view;
-				} catch (ClassCastException e) {
-					Log.e("ArrayAdapter", "You must supply a resource ID for a TextView");
-					throw new IllegalStateException(
-							"ArrayAdapter requires the resource ID to be a TextView", e);
-				}
-				T item = getItem(position);
-				if (item instanceof CharSequence) {
-					text.setText((CharSequence)item);
-				} else {
-					text.setText(Html.fromHtml(item.toString()));
-				}
-				return view;
-			}
-		}		
 	}
 }
