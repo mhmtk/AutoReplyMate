@@ -120,19 +120,19 @@ public class CallReceiver extends BroadcastReceiver{
 		 * 
 		 * That is sends and SMS, and mutes the ringer.
 		 * 
-		 * @param r
-		 * @param phoneNo
+		 * @param r The rule to be applied
+		 * @param phoneNo phone number to send SMS to
 		 */
 		private void applyRule(Rule r, String phoneNo) {
 			// Reply
 			String replyText = r.getText();
-			smsManager.sendTextMessage(phoneNo, null, replyText, null, null);
+			smsManager.sendMultipartTextMessage(phoneNo, null, smsManager.divideMessage(replyText), null, null);
 
 			// Add the reply to the Outbox DB
 			dbManager.addSMS(new SMS(System.currentTimeMillis(), replyText, String.valueOf(phoneNo), r.getName()));
 
 			//documentation & feedback
-			Toast.makeText(mContext, "Replied to " + phoneNo + ": " + replyText, Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "Replied to " + phoneNo + ": " + replyText.substring(0,80) + "...", Toast.LENGTH_SHORT).show();
 			Log.i(logTag, "Sent out an SMS to " + phoneNo);
 
 			// According to the settings, mute the ringer 
@@ -147,7 +147,6 @@ public class CallReceiver extends BroadcastReceiver{
 					} 
 				}, muteDelay);
 			}
-
 		}
 	}
 

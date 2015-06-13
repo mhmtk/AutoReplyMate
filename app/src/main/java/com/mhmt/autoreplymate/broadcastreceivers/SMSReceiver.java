@@ -19,6 +19,8 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * 
  * @author Mehmet Kologlu
@@ -40,7 +42,7 @@ public class SMSReceiver extends BroadcastReceiver{
 		String phoneNo = "";
 
 		Bundle bundle = intent.getExtras();
-		SmsMessage[] msg = null;
+		SmsMessage[] msg;
 
 		if (bundle != null) {
 			Log.i(logTag, "Non-null intent received");
@@ -79,19 +81,19 @@ public class SMSReceiver extends BroadcastReceiver{
 
 	/**
 	 * Sends out an SMS to phoneNo using Rule r, also logs this action to SMS table for outbox usage.
-	 * @param r
-	 * @param phoneNo
+	 * @param r Rule calling for sending an SMS
+	 * @param phoneNo phone number to send SMS to
 	 */
 	private void sendSMS(Rule r, String phoneNo) {
 		// Reply
 		String replyText = r.getText();
-		smsManager.sendTextMessage(phoneNo, null, replyText, null, null);
+		smsManager.sendMultipartTextMessage(phoneNo, null, smsManager.divideMessage(replyText), null, null);
 		
 		// Add the reply to the Outbox DB
 		dbManager.addSMS(new SMS(System.currentTimeMillis(), replyText, String.valueOf(phoneNo), r.getName()));
 		
 		//documentation & feedback
-		Toast.makeText(context, "Replied to " + phoneNo + ": " + replyText, Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "Replied to " + phoneNo + ": " + replyText.substring(0,80) + "...", Toast.LENGTH_SHORT).show();
 		Log.i(logTag, "Sent out an SMS to " + String.valueOf(phoneNo));
 	}
 	
