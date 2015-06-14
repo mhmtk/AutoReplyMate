@@ -230,6 +230,9 @@
     <string name="configure_text_empty">You have no Rules from which to create a widget</string>
     <string name="configure_text_info">Select a rule</string>
     <string name="configure_title">Add ARM Widget</string>
+    <string name="contactpicker_menu_deselectAll">Deselect All</string>
+    <string name="contactpicker_menu_done">Done</string>
+    <string name="contactpicker_menu_selectAll">Select All</string>
     <string name="contactpicker_title">Contact Picker</string>
     <string name="instructions">
 		<![CDATA[

@@ -29,8 +29,12 @@
     <string name="addedit_radio_call">Calls</string>
     <!-- AddEdit menu -->
     <string name="addedit_menu_save">Save</string>
-    <!-- Contact Picker -->
+    <!-- ContactPicker -->
     <string name="contactpicker_title">Contact Picker</string>
+    <!-- ContactPicker menu -->
+    <string name="contactpicker_menu_selectAll">Select All</string>
+    <string name="contactpicker_menu_deselectAll">Deselect All</string>
+    <string name="contactpicker_menu_done">Done</string>
     <!-- Outbox -->
     <string name="outbox_title">Outbox</string>
     <string name="outbox_text_empty">You have no messages to view</string>
