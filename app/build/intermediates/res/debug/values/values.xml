@@ -230,6 +230,7 @@
     <string name="configure_text_empty">You have no Rules from which to create a widget</string>
     <string name="configure_text_info">Select a rule</string>
     <string name="configure_title">Add ARM Widget</string>
+    <string name="contactpicker_title">Contact Picker</string>
     <string name="instructions">
 		<![CDATA[
 			<h2>Rules</h2>
@@ -245,6 +246,7 @@
 				<p>You can set call rule applications to silence the call when they\'re invoked.</p>
 		]]>
     </string>
+    <string name="instructions_title">Instructions</string>
     <string name="main_about_dialog_message">
         <![CDATA[
 			by <i>Mehmet Kologlu</i>\n<b>Version</b> 1.0 \nAny feedback is welcome.
@@ -271,7 +273,6 @@
     <string name="status_bar_notification_info_overflow">999+</string>
     <!-- From: file:/Users/mehmetk/AndroidStudioProjects/AutoReplyMate/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="title_activity_instructions">Instructions</string>
     <string name="title_activity_settings">Settings</string>
     <!-- From: file:/Users/mehmetk/AndroidStudioProjects/AutoReplyMate/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/res/values/values.xml -->
     <eat-comment/>

@@ -45,6 +45,9 @@ public class AddEditRule extends ActionBarActivity {
 	private boolean edit;
 	private String oldRuleName;
 
+	public void launchContactPicker(View view) {
+		startActivity(new Intent(this, ContactPicker.class));
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

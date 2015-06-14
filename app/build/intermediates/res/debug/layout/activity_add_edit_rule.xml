@@ -130,6 +130,11 @@
                         android:text="@string/addedit_radio_call" />
                 </RadioGroup>
             </LinearLayout>
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="Filter"
+                android:onClick="launchContactPicker"/>
         </LinearLayout>
     </ScrollView>
 
