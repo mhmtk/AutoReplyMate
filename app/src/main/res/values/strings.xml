@@ -42,6 +42,7 @@
 			<h2>Rules</h2>
 				<p>Rule names must be unique.</p>
 				<p>Only the name and text fields are required.</p>
+				<p>Rule texts longer than 160 characters (SMS limit) are supported, but will be sent as multiple SMSs</p>
 				<p>Press and hold on a Rule on the main window to edit or delete it.</p>
 				<p>On receiving an SMS or a call, all applicable rules will be invoked.</p>
 			<h2>Widgets</h2>
