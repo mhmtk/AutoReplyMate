@@ -14,7 +14,7 @@
             android:centerColor="#FFFFFF"
             android:centerY="0.50"
             android:endColor="#0066FF"
-            android:startColor="#478FB2"
+            android:startColor="#FFFFFF"
             android:type="sweep"
             android:useLevel="false" />
     </shape>
