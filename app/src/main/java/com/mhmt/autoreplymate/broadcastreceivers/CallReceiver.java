@@ -88,7 +88,8 @@ public class CallReceiver extends BroadcastReceiver{
 				break;
 			case TelephonyManager.CALL_STATE_RINGING:
 				Log.i(logTag, "RINGING");
-				if (!handled) { // In order 
+				if (!handled) { // In order
+					handled = true;
 					Log.i(logTag, "Call hasn't been handled, will invoke applicable rules");
 
 					try {
@@ -107,7 +108,6 @@ public class CallReceiver extends BroadcastReceiver{
 							applyRule(r, incomingNumber);
 						}
 					} //end of for each loop
-					handled = true;
 				} // end of if (!handled)
 				else
 					Log.i(logTag, "Call has been handled, will not try to invoke rules");
