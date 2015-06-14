@@ -29,6 +29,8 @@
     <string name="addedit_radio_call">Calls</string>
     <!-- AddEdit menu -->
     <string name="addedit_menu_save">Save</string>
+    <!-- Contact Picker -->
+    <string name="contactpicker_title">Contact Picker</string>
     <!-- Outbox -->
     <string name="outbox_title">Outbox</string>
     <string name="outbox_text_empty">You have no messages to view</string>
@@ -37,6 +39,7 @@
     <!-- Outbox menu -->
     <string name="outbox_menu_deleteAll">Delete All</string>
     <!-- Instructions -->
+    <string name="instructions_title">Instructions</string>
     <string name="instructions">
 		<![CDATA[
 			<h2>Rules</h2>
@@ -70,6 +73,8 @@
     <!-- Shared Preferences -->
     <string name="shared_preferences_key">COM.MHMT.AUTOTEXTMATE</string>
     <string name="settings_mute_position_key">com.mhmt.autotextmate.mutedelayposition</string>
-    <string name="title_activity_instructions">Instructions</string>
+
+
+
 
 </resources>
