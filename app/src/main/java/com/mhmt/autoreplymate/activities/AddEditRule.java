@@ -201,8 +201,7 @@ public class AddEditRule extends ActionBarActivity {
 		protected Rule doInBackground(String... ruleName) {
 			// Return the rule matching the rule name from the DB
 			dbManager = new DatabaseManager(getApplicationContext());
-			Rule rule = dbManager.getRule(ruleName[0]);
-			return rule;
+			return dbManager.getRule(ruleName[0]);
 		}
 
 		@Override
@@ -211,7 +210,7 @@ public class AddEditRule extends ActionBarActivity {
 			editTextName.setText(rule.getName());
 			editTextDescription.setText(rule.getDescription());
 			editTextText.setText(rule.getText());
-			checkBoxContacts.setChecked( (rule.getOnlyContacts() == 1) ? true : false);
+			checkBoxContacts.setChecked(rule.getOnlyContacts() == 1);
 			((RadioButton) radioReplyTo.getChildAt(rule.getReplyTo())).setChecked(true);
 
 			// Progress bar disappears
