@@ -3,7 +3,7 @@ package com.mhmt.autoreplymate.activities;
 import java.util.ArrayList;
 
 import com.mhmt.autoreplymate.R;
-import com.mhmt.autoreplymate.adapters.RuleListViewAdapter;
+import com.mhmt.autoreplymate.arrayadapters.RuleListViewAdapter;
 import com.mhmt.autoreplymate.database.DatabaseManager;
 import com.mhmt.autoreplymate.dataobjects.Rule;
 import com.mhmt.autoreplymate.widget.RuleWidgetProvider;
@@ -193,8 +193,8 @@ public class Main extends ActionBarActivity {
 	 * Creates a new thread to run in the background that queries the DB to
 	 * change the rule's status and then broadcasts a widget update if needed.
 	 * 
-	 * @param name the position of the toggle's item on the list, 0 indexed
-	 * @param position 
+	 * @param name the name of the rule whose toggle item is clicked
+	 * @param position the position of the toggle's item on the list, 0 indexed
 	 * @param status True if toggle is on, false otherwise
 	 */
 	public void onItemToggleClicked(final String name, int position, final boolean status) {

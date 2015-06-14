@@ -1,4 +1,4 @@
-package com.mhmt.autoreplymate.adapters;
+package com.mhmt.autoreplymate.arrayadapters;
 
 import android.content.Context;
 import android.text.Html;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.mhmt.autoreplymate.database.DatabaseManager;
 import com.mhmt.autoreplymate.dataobjects.Rule;
 import com.mhmt.autoreplymate.R;
-import com.mhmt.autoreplymate.adapters.HTMLTextArrayAdapter;
+import com.mhmt.autoreplymate.arrayadapters.HTMLTextArrayAdapter;
 
 import android.app.ListActivity;
 import android.app.PendingIntent;
@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RemoteViews;
 

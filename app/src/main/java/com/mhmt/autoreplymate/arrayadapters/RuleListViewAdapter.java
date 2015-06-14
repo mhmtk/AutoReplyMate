@@ -1,4 +1,4 @@
-package com.mhmt.autoreplymate.adapters;
+package com.mhmt.autoreplymate.arrayadapters;
 
 import java.util.ArrayList;
 
@@ -104,12 +104,10 @@ public class RuleListViewAdapter extends BaseAdapter {
 			holder=(ViewHolder)vi.getTag();
 
 		if(data.size()<=0) //No data in the given array
-		{
-		}
+		{}
 		else
 		{
 			// Get the current Rule from the ArrayList
-			tempValue=null;
 			tempValue = ( Rule ) data.get( position );
 			tName = tempValue.getName();
 			tText = tempValue.getText();
@@ -117,7 +115,7 @@ public class RuleListViewAdapter extends BaseAdapter {
 			// Configure the layout according to the current Rule
 			holder.nameText.setText(tName);
 			holder.descriptionText.setText(tText);
-			holder.statusToggle.setChecked((tempValue.getStatus() == 1) ? true : false);
+			holder.statusToggle.setChecked((tempValue.getStatus() == 1));
 			if (tempValue.getOnlyContacts() == 0)
 				holder.onlyContactsImage.setVisibility(View.INVISIBLE);
 			switch (tempValue.getReplyTo()) {
