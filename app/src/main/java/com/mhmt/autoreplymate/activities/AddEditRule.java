@@ -105,7 +105,7 @@ public class AddEditRule extends ActionBarActivity {
 		Log.i(logTag, "Save button clicked with edit as " + edit);
 
 		String newRuleName = editTextName.getText().toString().trim(); //get the new rule name
-		String ruleText = editTextText.getText().toString().trim(); //get the text
+		String ruleText = editTextText.getText().toString(); //get the text
 
 		// Validate input
 		if (newRuleName.length() == 0){
@@ -118,10 +118,9 @@ public class AddEditRule extends ActionBarActivity {
 			dbManager = new DatabaseManager(getApplicationContext()); //get a DB
 			if (edit) { //Edit functionality
 				try {
-
 					// If the name of the rule is changed request the wID from the DB.
 					// Then call for the widgets update if there's one
-					if (oldRuleName != newRuleName) { //changed
+					if (! oldRuleName.equals(newRuleName)) { //changed
 						int wID = dbManager.editRule(true, oldRuleName, new Rule(newRuleName,
 								editTextDescription.getText().toString().trim(),
 								ruleText,
@@ -134,13 +133,13 @@ public class AddEditRule extends ActionBarActivity {
 							updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{wID} ).setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 							this.sendBroadcast(updateWidgetIntent);
 							Log.i(logTag, "Broadcasted " + updateWidgetIntent.toString());	
-							Toast.makeText(getApplicationContext(), "Rule edited, its widget will automatically update.", Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), "Rule edited, its widget will update automatically.", Toast.LENGTH_SHORT).show();
 						}
 					}
 					else { //if the name hasnt changed, dont request a wID
 						dbManager.editRule(false, oldRuleName, new Rule(newRuleName,
-								editTextDescription.getText().toString(),
-								editTextText.getText().toString(),
+								editTextDescription.getText().toString().trim(),
+								ruleText,
 								checkBoxContacts.isChecked(),
 								radioReplyTo.indexOfChild(findViewById(radioReplyTo.getCheckedRadioButtonId()))));
 						Toast.makeText(getApplicationContext(), "Rule edited.", Toast.LENGTH_SHORT).show();
@@ -150,25 +149,25 @@ public class AddEditRule extends ActionBarActivity {
 					super.onBackPressed();
 				}
 				catch(SQLiteConstraintException ex){ //catch constraint exceptions, and give error feedback to user
-					Toast.makeText(getApplicationContext(), "Rule NOT added: name must be unique!", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "Rule NOT saved: name must be unique!", Toast.LENGTH_SHORT).show();
 					Log.i(logTag, "Rule not added, cought " + ex);
 				}
 			}
 			else { //Add functionality
 				//add Rule to DB
 				try {
-					if (dbManager.addRule(new Rule(editTextName.getText().toString(),
-							editTextDescription.getText().toString(),
-							editTextText.getText().toString(),
+					if (dbManager.addRule(new Rule(editTextName.getText().toString().trim(),
+							editTextDescription.getText().toString().trim(),
+							ruleText,
 							checkBoxContacts.isChecked(),
 							radioReplyTo.indexOfChild(findViewById(radioReplyTo.getCheckedRadioButtonId()))))
 							!= -1) // ! -1 means no error
 					{
-						Log.i(logTag, "Rule added successfull.y");
+						Log.i(logTag, "Rule added successfully");
 						Toast.makeText(getApplicationContext(), "Rule succesfully added.", Toast.LENGTH_SHORT).show();
 						super.onBackPressed(); //return to homepage
 					} else {
-						Log.i(logTag, "Problem while adding rule.");
+						Log.i(logTag, "Problem with adding the rule.");
 						Toast.makeText(getApplicationContext(), "A problem has occured. Try restarting the app.", Toast.LENGTH_SHORT).show();
 					}
 					
