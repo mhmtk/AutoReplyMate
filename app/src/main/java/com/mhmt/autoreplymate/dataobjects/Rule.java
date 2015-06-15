@@ -15,6 +15,10 @@ public class Rule {
 	int onlyContacts;
 	int replyTo;
 	int status;
+	String include;
+	String exclude;
+	String[] includeA;
+	String[] excludeA;
 
 	/**
 	 * Constructor with all fields except status, used when adding a rule,

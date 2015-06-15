@@ -105,7 +105,8 @@
                 <RadioGroup
                     android:id="@+id/radio_replyTo"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
 
                     <RadioButton
                         android:id="@+id/radio_both"
