@@ -22,6 +22,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * 
  * @author Mehmet Kologlu
@@ -29,6 +31,9 @@ import android.widget.Toast;
  * 
  */
 public class AddEditRule extends ActionBarActivity {
+
+	static final int PICK_INCLUDE_CONTACT_REQUEST = 0;
+	static final int PICK_EXCLUDE_CONTACT_REQUEST = 1;
 
 	private String logTag = "AddEditRule";
 
@@ -73,9 +78,30 @@ public class AddEditRule extends ActionBarActivity {
 		}
 	}
 
-	public void launchContactPicker(View view) {
-		// TODO start activity for result
-		startActivity(new Intent(this, ContactPicker.class));
+	public void launchIncludeContactPicker(View view) {
+		startActivityForResult(new Intent(this, ContactPicker.class), PICK_INCLUDE_CONTACT_REQUEST);
+	}
+
+	public void launchExcludeContactPicker(View view) {
+		startActivityForResult(new Intent(this, ContactPicker.class), PICK_EXCLUDE_CONTACT_REQUEST);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			if(requestCode == PICK_INCLUDE_CONTACT_REQUEST) {
+				// TODO
+				Log.i(logTag, "Returned with include requestCode");
+				ArrayList<String> include = data.getStringArrayListExtra("selected_contacts");
+			}
+			else if(requestCode == PICK_EXCLUDE_CONTACT_REQUEST){
+				// TODO
+				Log.i(logTag, "Returned with exlude requestcode");
+				ArrayList<String> exclude = data.getStringArrayListExtra("selected_contacts");
+			} else
+				Log.e(logTag, "requestCode doesnt match any predefined one");
+		} else
+			Log.i(logTag, "resultCode is not OK!");
 	}
 
 	@Override

@@ -133,8 +133,13 @@
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:text="Filter"
-                android:onClick="launchContactPicker"/>
+                android:text="Include"
+                android:onClick="launchIncludeContactPicker"/>
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="Exclude"
+                android:onClick="launchExcludeContactPicker"/>
         </LinearLayout>
     </ScrollView>
 

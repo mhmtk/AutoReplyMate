@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -25,17 +24,18 @@ import com.mhmt.autoreplymate.R;
  * @author Mehmet Kologlu
  * @version June 15, 2015
  *
- * insipired by Satheesh's comment on
+ * inspired by Satheesh's comment on
  * http://stackoverflow.com/questions/9450058/using-checkbox-to-filter-contacts-and-get-phone-number/10105655#10105655
  */
 public class ContactPicker extends ActionBarActivity {
 
     static ContentResolver cr;
-    String[] phoneNos;
-    String[] listContacts;
-    ArrayList<String> selectedContacts = new ArrayList<String>();
+    String[] phoneNos; //array holding phonenos, from which the selected ones go into selectedContacts
+    String[] listContacts; //array holding Strings that will be displayed in the listview
+    ArrayList<String> selectedContacts = new ArrayList<String>(); //The ArrayList to be returned to parent activity
     Button selectButton;
     Activity thisActivity;
+    String logTag = "ContactPicker";
 
     SparseBooleanArray checked;
     ListView listView;
@@ -48,23 +48,30 @@ public class ContactPicker extends ActionBarActivity {
 
         listView = (ListView)findViewById(R.id.contactpicker_contactsList);
 
-        populateContactList();
+        // store contacts + nos in listContacts
+        getContactList();
 
+        // populate the listview with listContacts
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, listContacts);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
     }
 
-    private void populateContactList(){
+    /**
+     * Stores a list of contactName + no into listContacts
+     */
+    private void getContactList(){
         Uri myContacts = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
         String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.Data.DISPLAY_NAME};
         Cursor cursor = getContentResolver().query(myContacts,
-                projection, null, null,
-                ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC"  // order
+                projection, // only number and name columns
+                null, null, // all rows
+                ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC"  // sort by ascending name
         );
         phoneNos = new String[cursor.getCount()];
         listContacts = new String[cursor.getCount()];
+
         int i =0;
         if(cursor.moveToFirst())
         {
@@ -83,21 +90,27 @@ public class ContactPicker extends ActionBarActivity {
         cursor.close();
     }
 
+    /**
+     * Called when the done actionbar button is selected.
+     * Finishes the activity with the selected phoneNoes as the extra of the result intent
+     */
     private void doneSelected(){
         checked = listView.getCheckedItemPositions();
 
         for (int i = 0; i < listView.getCount(); i++)
             if (checked.get(i)) {
-                selectedContacts.add(phoneNos[i]); // TODO trim - ( ) and white space
+                String no = phoneNos[i];
+                selectedContacts.add(no.replaceAll("[()\\-\\s]", ""));
                 //you can you this array list to next activity
                       /* do whatever you want with the checked item */
+                Log.i(logTag, "input: " + phoneNos[i] + " output: " + selectedContacts.get(0));
             }
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("selected_contacts", selectedContacts);
 
         Intent contactIntent = new Intent();
         contactIntent.putExtras(bundle);
-        setResult(1, contactIntent);
+        setResult(RESULT_OK, contactIntent);
         thisActivity.finish();
     }
 
