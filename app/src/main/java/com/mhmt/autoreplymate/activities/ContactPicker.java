@@ -88,7 +88,7 @@ public class ContactPicker extends ActionBarActivity {
 
         for (int i = 0; i < listView.getCount(); i++)
             if (checked.get(i)) {
-                selectedContacts.add(phoneNos[i]);
+                selectedContacts.add(phoneNos[i]); // TODO trim - ( ) and white space
                 //you can you this array list to next activity
                       /* do whatever you want with the checked item */
             }
