@@ -23,7 +23,7 @@ import com.mhmt.autoreplymate.R;
 
 /**
  * @author Mehmet Kologlu
- * @version June 14, 2015
+ * @version June 15, 2015
  *
  * insipired by Satheesh's comment on
  * http://stackoverflow.com/questions/9450058/using-checkbox-to-filter-contacts-and-get-phone-number/10105655#10105655
