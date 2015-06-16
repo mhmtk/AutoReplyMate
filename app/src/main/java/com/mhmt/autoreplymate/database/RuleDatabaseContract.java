@@ -25,6 +25,8 @@ public class RuleDatabaseContract {
 		public static final String RULE_COLUMN_REPLYTO = "replyTo";
 		public static final String RULE_COLUMN_STATUS = "status";
 		public static final String RULE_COLUMN_WIDGET_ID = "widgetID";
+		public static final String RULE_COLUMN_INCLUDE = "include";
+		public static final String RULE_COLUMN_EXCLUDE = "exclude";
 	}
 	
 	public static abstract class SMSEntry implements BaseColumns{
