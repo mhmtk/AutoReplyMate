@@ -28,6 +28,7 @@ public class RuleDatabaseSQLHelper extends SQLiteOpenHelper{
 	private static final String UNIQUE = " UNIQUE";
 	private static final String DEFAULT = " DEFAULT";
 	private static final String STATUS_DEFAULT_VALUE = " 1";
+	private static final String FILTER_DEFAULT_VALUE = "''";
 
 	//SQL command to create RULE table
 	private static final String SQL_CREATE_RULE=
@@ -39,8 +40,8 @@ public class RuleDatabaseSQLHelper extends SQLiteOpenHelper{
 					RuleEntry.RULE_COLUMN_REPLYTO + INTEGER_TYPE + COMMA_SEP +
 					RuleEntry.RULE_COLUMN_STATUS + INTEGER_TYPE + DEFAULT + STATUS_DEFAULT_VALUE + COMMA_SEP +
 					RuleEntry.RULE_COLUMN_WIDGET_ID + INTEGER_TYPE + DEFAULT + " " + AppWidgetManager.INVALID_APPWIDGET_ID + COMMA_SEP +
-					RuleEntry.RULE_COLUMN_INCLUDE + TEXT_TYPE + COMMA_SEP +
-					RuleEntry.RULE_COLUMN_EXCLUDE + TEXT_TYPE + ")";
+					RuleEntry.RULE_COLUMN_INCLUDE + TEXT_TYPE + DEFAULT + " " + FILTER_DEFAULT_VALUE + COMMA_SEP +
+					RuleEntry.RULE_COLUMN_EXCLUDE + TEXT_TYPE + DEFAULT + " " + FILTER_DEFAULT_VALUE + ")";
 
 	private static final String SQL_CREATE_SMS =
 			"CREATE TABLE IF NOT EXISTS " + SMSEntry.SMS_TABLE_NAME + " (" +
@@ -89,8 +90,8 @@ public class RuleDatabaseSQLHelper extends SQLiteOpenHelper{
 			Log.i(logTag, "Updating db from 1 to 2");
 			// Add in/exclude
 			try {
-				db.execSQL("ALTER TABLE " + RuleEntry.RULE_TABLE_NAME + " ADD COLUMN " + RuleEntry.RULE_COLUMN_INCLUDE + TEXT_TYPE);
-				db.execSQL("ALTER TABLE " + RuleEntry.RULE_TABLE_NAME + " ADD COLUMN " + RuleEntry.RULE_COLUMN_EXCLUDE + TEXT_TYPE);
+				db.execSQL("ALTER TABLE " + RuleEntry.RULE_TABLE_NAME + " ADD COLUMN " + RuleEntry.RULE_COLUMN_INCLUDE + TEXT_TYPE + DEFAULT + " " + FILTER_DEFAULT_VALUE);
+				db.execSQL("ALTER TABLE " + RuleEntry.RULE_TABLE_NAME + " ADD COLUMN " + RuleEntry.RULE_COLUMN_EXCLUDE + TEXT_TYPE + DEFAULT + " " + FILTER_DEFAULT_VALUE);;
 				Log.i(logTag, "Updated db from 1 to 2");
 			} catch (SQLException e) {
 				Log.i(logTag, "Updated failed");
