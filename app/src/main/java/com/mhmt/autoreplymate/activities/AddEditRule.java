@@ -50,8 +50,8 @@ public class AddEditRule extends ActionBarActivity {
 	private boolean edit;
 	private String oldRuleName;
 
-	String includeString = "";
-	String excludeString = "";
+	String includeString;
+	String excludeString;
 
 	private static String outgoingExtraTag = "selected_contacts";
 	private static String incomingExtraTag = "selected_contacts_string";
@@ -60,7 +60,13 @@ public class AddEditRule extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_edit_rule);
-		
+
+		// initiate
+		if (includeString == null)
+			includeString = "";
+		if (excludeString == null)
+			excludeString = "";
+
 		// Get views
 		editTextName = (EditText) findViewById(R.id.editText_name);
 		editTextDescription = (EditText) findViewById(R.id.editText_description);
@@ -100,6 +106,7 @@ public class AddEditRule extends ActionBarActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
 			if(requestCode == PICK_INCLUDE_CONTACT_REQUEST) {
 				Log.i(logTag, "Returned with include requestCode");

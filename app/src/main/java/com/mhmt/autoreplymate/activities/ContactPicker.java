@@ -48,6 +48,9 @@ public class ContactPicker extends ActionBarActivity {
         setContentView(R.layout.activity_contact_picker);
         thisActivity = this;
 
+        // Set result the canceled incase user bails
+        setResult(RESULT_CANCELED);
+
         listView = (ListView)findViewById(R.id.contactpicker_contactsList);
 
         // TODO progress bar
@@ -118,33 +121,23 @@ public class ContactPicker extends ActionBarActivity {
         String selectedContactsString = "";
         for (int i = 0; i < listView.getCount(); i++)
             if (checked.get(i)) {
-//                selectedContacts.add(no.replaceAll("[()\\-\\s]", ""));
                 selectedContactsString += phoneNos.get(i) + ",";
-                //you can you this array list to next activity
-                      /* do whatever you want with the checked item */
             }
-        // Put the array as an extra and finisha ctivity
-//        Bundle bundle = new Bundle();
-//        bundle.putStringArrayList("selected_contacts", selectedContacts);
+        // Put the array as an extra and finish activity
         Intent contactIntent = new Intent();
         contactIntent.putExtra(outgoingExtraTag, selectedContactsString);
-//        contactIntent.putExtras(bundle);
         setResult(RESULT_OK, contactIntent);
         thisActivity.finish();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_contact_picker, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.contactpicker_action_done:
                 doneSelected();
@@ -154,6 +147,9 @@ public class ContactPicker extends ActionBarActivity {
                 return true;
             case R.id.contactpicker_action_deselectAll:
                 setAll(false);
+                return true;
+            case android.R.id.home:
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
