@@ -74,7 +74,7 @@ public class ContactPicker extends ActionBarActivity {
             }
 
             long endTime = System.nanoTime();
-            Log.i(logTag, "population took " + (endTime - startTime) + " secs");
+            Log.i(logTag, "population took " + (endTime - startTime) + " secs"); // TODO delete
         }
 
     }
