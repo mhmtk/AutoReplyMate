@@ -50,8 +50,6 @@ public class AddEditRule extends ActionBarActivity {
 	private boolean edit;
 	private String oldRuleName;
 
-//	ArrayList<String> include = new ArrayList<String>();
-//	ArrayList<String> exclude = new ArrayList<String>();
 	String includeString = "";
 	String excludeString = "";
 
@@ -105,12 +103,10 @@ public class AddEditRule extends ActionBarActivity {
 		if (resultCode == RESULT_OK) {
 			if(requestCode == PICK_INCLUDE_CONTACT_REQUEST) {
 				Log.i(logTag, "Returned with include requestCode");
-//				include = data.getStringArrayListExtra("selected_contacts");
 				includeString = data.getStringExtra(incomingExtraTag);
 			}
 			else if(requestCode == PICK_EXCLUDE_CONTACT_REQUEST){
 				Log.i(logTag, "Returned with exlude requestcode");
-//				exclude = data.getStringArrayListExtra("selected_contacts");
 				excludeString = data.getStringExtra(incomingExtraTag);
 			} else
 				Log.e(logTag, "requestCode doesnt match any predefined one");
@@ -130,9 +126,6 @@ public class AddEditRule extends ActionBarActivity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		switch (item.getItemId()) {
 		case R.id.add_action_save:
 			saveButtonClicked();
@@ -233,14 +226,6 @@ public class AddEditRule extends ActionBarActivity {
 		Log.i(logTag, "Broadcasted " + updateWidgetIntent.toString());
 		Toast.makeText(getApplicationContext(), "Rule edited, its widget will update automatically.", Toast.LENGTH_SHORT).show();
 	}
-
-//	private String filterArrayListToString(ArrayList<String> list) {
-//		String str = "";
-//		for (String s: list) {
-//			str += s + ",";
-//		}
-//		return str;
-//	}
 
 	/**
 	 * AsyncTask to populate the fields if the activity was launched by an edit intent
