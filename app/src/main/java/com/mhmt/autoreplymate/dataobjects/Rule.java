@@ -17,8 +17,29 @@ public class Rule {
 	int status;
 	String include;
 	String exclude;
-	String[] includeA;
-	String[] excludeA;
+
+	/**
+	 * Constructor with all fields
+	 *
+	 * @param name	Name of the rule
+	 * @param description Description of the rule
+	 * @param text Text SMS text of the rule
+	 * @param onlyContacts Should the rule only apply to contacts?
+	 * @param replyTo SMS, Call, or Both
+	 * @param status Is the rule on or off
+	 * @param include String containing nos to be included
+	 * @param exclude String containing nos to be excluded
+	 */
+	public Rule(String name, String description, String text, int onlyContacts, int replyTo, int status, String include, String exclude) {
+		this.name = name;
+		this.description = description;
+		this.text = text;
+		this.onlyContacts = onlyContacts;
+		this.status = status;
+		this.replyTo = replyTo;
+		this.include = include;
+		this.exclude = exclude;
+	}
 
 	/**
 	 * Constructor with all fields except status, used when adding a rule,
@@ -29,19 +50,23 @@ public class Rule {
 	 * @param text Text SMS text of the rule
 	 * @param onlyContacts	Should the rule only apply to contacts?
 	 * @param replyTo SMS, Call, or Both
+	 * @param include String containing nos to be included
+	 * @param exclude String containing nos to be excluded
 	 */
-	public Rule(String name, String description, String text, boolean onlyContacts, int replyTo) {
+	public Rule(String name, String description, String text, boolean onlyContacts, int replyTo, String include, String exclude) {
 		this.name = name;
 		this.description = description;
 		this.text = text;
 		this.onlyContacts = onlyContacts ? 1 : 0;
 		this.replyTo = replyTo;
 		this.status = 1;
+		this.include = include;
+		this.exclude = exclude;
 	}
-	
+
 	/**
-	 * Constructor with all fields
-	 * 
+	 * Constructor with all fields except contacts filters
+	 *
 	 * @param name	Name of the rule
 	 * @param description Description of the rule
 	 * @param text Text SMS text of the rule
@@ -56,6 +81,8 @@ public class Rule {
 		this.onlyContacts = onlyContacts;
 		this.status = status;
 		this.replyTo = replyTo;
+		this.include = "";
+		this.exclude = "";
 	}
 
 	/**
@@ -72,6 +99,8 @@ public class Rule {
 		this.onlyContacts = -1;
 		this.replyTo = -1;
 		this.status = status;
+		this.include = "";
+		this.exclude = "";
 	}
 	
 	/**
@@ -88,6 +117,8 @@ public class Rule {
 		this.onlyContacts = onlyContacts;
 		this.replyTo = -1;
 		this.status = -1;
+		this.include = "";
+		this.exclude = "";
 	}
 
 	public String getName() {
@@ -126,4 +157,8 @@ public class Rule {
 				+ ((getReplyTo() == 0) ? "SMS & Calls" : ((getReplyTo() == 1) ? "SMS" : "Calls"))
 				+ ((onlyContacts == 1) ? "<br>Contacts Only"  : "");
 	}
+
+	public String getInclude() {return include; }
+
+	public String getExclude() {return exclude; }
 }
