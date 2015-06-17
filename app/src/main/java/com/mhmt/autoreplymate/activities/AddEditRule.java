@@ -50,6 +50,11 @@ public class AddEditRule extends ActionBarActivity {
 	private boolean edit;
 	private String oldRuleName;
 
+//	ArrayList<String> include = new ArrayList<String>();
+//	ArrayList<String> exclude = new ArrayList<String>();
+	String includeString = "";
+	String excludeString = "";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,10 +84,12 @@ public class AddEditRule extends ActionBarActivity {
 	}
 
 	public void launchIncludeContactPicker(View view) {
+		// TODO pass info as extra in case of edit
 		startActivityForResult(new Intent(this, ContactPicker.class), PICK_INCLUDE_CONTACT_REQUEST);
 	}
 
 	public void launchExcludeContactPicker(View view) {
+		// TODO pass info as extra in case of edit
 		startActivityForResult(new Intent(this, ContactPicker.class), PICK_EXCLUDE_CONTACT_REQUEST);
 	}
 
@@ -90,14 +97,14 @@ public class AddEditRule extends ActionBarActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			if(requestCode == PICK_INCLUDE_CONTACT_REQUEST) {
-				// TODO
 				Log.i(logTag, "Returned with include requestCode");
-				ArrayList<String> include = data.getStringArrayListExtra("selected_contacts");
+//				include = data.getStringArrayListExtra("selected_contacts");
+				includeString = data.getStringExtra("selected_contacts_string");
 			}
 			else if(requestCode == PICK_EXCLUDE_CONTACT_REQUEST){
-				// TODO
 				Log.i(logTag, "Returned with exlude requestcode");
-				ArrayList<String> exclude = data.getStringArrayListExtra("selected_contacts");
+//				exclude = data.getStringArrayListExtra("selected_contacts");
+				excludeString = data.getStringExtra("selected_contacts_string");
 			} else
 				Log.e(logTag, "requestCode doesnt match any predefined one");
 		} else
@@ -156,23 +163,22 @@ public class AddEditRule extends ActionBarActivity {
 								editTextDescription.getText().toString().trim(),
 								ruleText,
 								checkBoxContacts.isChecked(),
-								radioReplyTo.indexOfChild(findViewById(radioReplyTo.getCheckedRadioButtonId()))));
-
+								radioReplyTo.indexOfChild(findViewById(radioReplyTo.getCheckedRadioButtonId())),
+								includeString,
+								excludeString));
 						// If the rule has a widget, call to update it
 						if (wID != AppWidgetManager.INVALID_APPWIDGET_ID) {
-							Intent updateWidgetIntent = new Intent();
-							updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{wID} ).setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-							this.sendBroadcast(updateWidgetIntent);
-							Log.i(logTag, "Broadcasted " + updateWidgetIntent.toString());	
-							Toast.makeText(getApplicationContext(), "Rule edited, its widget will update automatically.", Toast.LENGTH_SHORT).show();
+							callForWidgetUpdate(wID);
 						}
 					}
-					else { //if the name hasnt changed, dont request a wID
+					else { //if the name hasn't changed, don't request a wID
 						dbManager.editRule(false, oldRuleName, new Rule(newRuleName,
 								editTextDescription.getText().toString().trim(),
 								ruleText,
 								checkBoxContacts.isChecked(),
-								radioReplyTo.indexOfChild(findViewById(radioReplyTo.getCheckedRadioButtonId()))));
+								radioReplyTo.indexOfChild(findViewById(radioReplyTo.getCheckedRadioButtonId())),
+								includeString,
+								excludeString));
 						Toast.makeText(getApplicationContext(), "Rule edited.", Toast.LENGTH_SHORT).show();
 					}
 					Log.i(logTag, "Rule edited");
@@ -191,8 +197,10 @@ public class AddEditRule extends ActionBarActivity {
 							editTextDescription.getText().toString().trim(),
 							ruleText,
 							checkBoxContacts.isChecked(),
-							radioReplyTo.indexOfChild(findViewById(radioReplyTo.getCheckedRadioButtonId()))))
-							!= -1) // ! -1 means no error
+							radioReplyTo.indexOfChild(findViewById(radioReplyTo.getCheckedRadioButtonId())),
+							includeString,
+							excludeString))
+							!= -1) // -1 means error
 					{
 						Log.i(logTag, "Rule added successfully");
 						Toast.makeText(getApplicationContext(), "Rule succesfully added.", Toast.LENGTH_SHORT).show();
@@ -210,6 +218,22 @@ public class AddEditRule extends ActionBarActivity {
 			}
 		}
 	}
+
+	private void callForWidgetUpdate(int widgetID) {
+		Intent updateWidgetIntent = new Intent();
+		updateWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{widgetID} ).setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+		this.sendBroadcast(updateWidgetIntent);
+		Log.i(logTag, "Broadcasted " + updateWidgetIntent.toString());
+		Toast.makeText(getApplicationContext(), "Rule edited, its widget will update automatically.", Toast.LENGTH_SHORT).show();
+	}
+
+//	private String filterArrayListToString(ArrayList<String> list) {
+//		String str = "";
+//		for (String s: list) {
+//			str += s + ",";
+//		}
+//		return str;
+//	}
 
 	/**
 	 * AsyncTask to populate the fields if the activity was launched by an edit intent
@@ -238,6 +262,9 @@ public class AddEditRule extends ActionBarActivity {
 			editTextText.setText(rule.getText());
 			checkBoxContacts.setChecked(rule.getOnlyContacts() == 1);
 			((RadioButton) radioReplyTo.getChildAt(rule.getReplyTo())).setChecked(true);
+			// get the inc/exc fields
+			includeString = rule.getInclude();
+			excludeString = rule.getExclude();
 
 			// Progress bar disappears
 			progressBar.setVisibility(View.GONE);

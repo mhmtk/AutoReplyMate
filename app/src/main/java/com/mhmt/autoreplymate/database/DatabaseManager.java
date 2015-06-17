@@ -32,7 +32,7 @@ public class DatabaseManager {
 
 	/**
 	 * Constructor
-	 * @param context
+	 * @param context Context
 	 */
 	public DatabaseManager(Context context){
 		this.dbHelper = new RuleDatabaseSQLHelper(context, "", null, 0);
@@ -96,7 +96,7 @@ public class DatabaseManager {
 
 	/**
 	 * Returns a rule object from the database that corresponds to the given rule name
-	 * 
+	 *
 	 * @param ruleName The name of the rule requested
 	 * @return The Rule object of the given rule
 	 */
@@ -120,11 +120,14 @@ public class DatabaseManager {
 					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_TEXT)),
 					c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_ONLYCONTACTS)),
 					c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_REPLYTO)),
-					c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_STATUS)));
+					c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_STATUS)),
+					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_INCLUDE)),
+					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_EXCLUDE)));
 		}
-		else 
+		else
 			Log.e(logTag, "The cursor returned by getRule was null for given rule name. This should NOT happen");
 
+		c.close();
 		db.close();
 
 		return rule;
@@ -135,7 +138,7 @@ public class DatabaseManager {
 	 * May return null, deal with it.
 	 * 
 	 * @param widgetID The widgetID associated with the rule to return
-	 * @return MAY return null if no widgetID matches
+	 * @return MAY return null if no widgetID matches, otherwise the rule
 	 */
 	public Rule getRule(int widgetID) {
 
@@ -161,6 +164,7 @@ public class DatabaseManager {
 		else 
 			Log.i(logTag, "The cursor returned by getRule was null for given widgetID. This is normal during widget creation");
 
+		c.close();
 		db.close();
 		return rule; // Null return is dealt with on the other end
 	}
@@ -214,6 +218,7 @@ public class DatabaseManager {
 			c.moveToNext();
 		}
 
+		c.close();
 		db.close();
 		return ruleArray;
 	}
@@ -266,6 +271,7 @@ public class DatabaseManager {
 			c.moveToNext();
 		}
 
+		c.close();
 		db.close();
 		return ruleArray;
 	}
@@ -286,7 +292,7 @@ public class DatabaseManager {
 		//get writable database
 		db = dbHelper.getWritableDatabase();
 
-		int wID = -1; // create an arbitrary wID
+		int wID = AppWidgetManager.INVALID_APPWIDGET_ID; // create an arbitrary wID
 
 		// if the wID is requested, get it from the DB
 		if (widgetIdRequestFlag) {
@@ -301,7 +307,8 @@ public class DatabaseManager {
 				wID = c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_WIDGET_ID));
 			}
 			else 
-				Log.i(logTag, "The cursor returned by getRule was null for given widgetID. This is normal during widget creation");			
+				Log.i(logTag, "The cursor returned by getRule was null for given widgetID. This is normal during widget creation");
+			c.close();
 		}
 
 		ContentValues v = new ContentValues();
@@ -310,11 +317,13 @@ public class DatabaseManager {
 		v.put(RuleEntry.RULE_COLUMN_TEXT, newRule.getText());
 		v.put(RuleEntry.RULE_COLUMN_ONLYCONTACTS, newRule.getOnlyContacts());
 		v.put(RuleEntry.RULE_COLUMN_REPLYTO, newRule.getReplyTo());
+		v.put(RuleEntry.RULE_COLUMN_INCLUDE, newRule.getInclude());
+		v.put(RuleEntry.RULE_COLUMN_EXCLUDE, newRule.getExclude());
 
 		db.update(RuleEntry.RULE_TABLE_NAME,
 				v,
 				RuleEntry.RULE_COLUMN_NAME + "=?",
-				new String[] {oldRuleName});
+				new String[]{oldRuleName});
 
 		Log.i(logTag, "UPDATE " + RuleEntry.RULE_TABLE_NAME +
 				" SET " + RuleEntry.RULE_COLUMN_NAME + "=" + newRule.getName() + 
@@ -322,6 +331,8 @@ public class DatabaseManager {
 				" , " + RuleEntry.RULE_COLUMN_TEXT + "=" + newRule.getText() +
 				" , " + RuleEntry.RULE_COLUMN_ONLYCONTACTS + "=" + String.valueOf(newRule.getOnlyContacts()) +
 				" , " + RuleEntry.RULE_COLUMN_REPLYTO + "=" + String.valueOf(newRule.getReplyTo()) +
+				" , " + RuleEntry.RULE_COLUMN_INCLUDE + "=" + newRule.getInclude() +
+				" , " + RuleEntry.RULE_COLUMN_EXCLUDE + "=" + newRule.getExclude() +
 				" WHERE " + RuleEntry.RULE_COLUMN_NAME + "=" + oldRuleName);
 		db.close(); //close database 
 
@@ -348,8 +359,10 @@ public class DatabaseManager {
 		values.put(RuleEntry.RULE_COLUMN_TEXT, rule.getText());
 		values.put(RuleEntry.RULE_COLUMN_ONLYCONTACTS, rule.getOnlyContacts());
 		values.put(RuleEntry.RULE_COLUMN_REPLYTO, rule.getReplyTo());
+		values.put(RuleEntry.RULE_COLUMN_INCLUDE, rule.getInclude());
+		values.put(RuleEntry.RULE_COLUMN_EXCLUDE, rule.getExclude());
 
-		//Insert the new row
+		//Insert the new row, get feedback
 		long r = db.insertOrThrow(RuleEntry.RULE_TABLE_NAME, null, values);
 
 		db.close(); //close database
@@ -360,7 +373,7 @@ public class DatabaseManager {
 	/**
 	 * Returns all entries in the rules database table as an arraylist
 	 * 
-	 * @return
+	 * @return An ArrayList of all rules in the DB
 	 */
 	public ArrayList<Rule> getRulesArray() {
 		ruleArray = new ArrayList<Rule>();
@@ -411,6 +424,7 @@ public class DatabaseManager {
 			c.moveToNext();
 		}
 
+		c.close();
 		db.close();
 		return ruleArray;
 	}
@@ -469,6 +483,7 @@ public class DatabaseManager {
 			c.moveToNext();
 		}
 
+		c.close();
 		db.close();
 		return ruleArray;
 	}
@@ -496,7 +511,12 @@ public class DatabaseManager {
 		else 
 			Log.e(logTag, "The cursor returned by toggleRule(Str s) was null for given ruleName");
 
+
 		int curStatus = c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_STATUS));
+
+
+		c.close();
+
 		int statusToSet = (curStatus == 1) ? 0 : 1;
 
 		ContentValues v = new ContentValues();
@@ -514,7 +534,7 @@ public class DatabaseManager {
 	 * Called to change the status of the rule with the given name to the given state
 	 * 
 	 * @param name The name of the rule of which the status will be toggled
-	 * @param status The state the rule's status should be set to
+	 * @param state The state the rule's status should be set to
 	 * 
 	 * @return Returns the widget ID of the 
 	 */
@@ -536,6 +556,7 @@ public class DatabaseManager {
 		else //Cursor is empty = Error
 			Log.e(logTag, "The cursor returned by setRuleStatus(Str n, bool s) was null for given ruleName");
 		int wID = c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_WIDGET_ID)); //save the widget ID
+		c.close();
 
 		// Update the database to set the state of the rule to the parameter
 		ContentValues v = new ContentValues();
@@ -572,12 +593,14 @@ public class DatabaseManager {
 			c.moveToFirst();
 
 		// Delete and close DB
-		int result = db.delete(RuleEntry.RULE_TABLE_NAME, RuleEntry.RULE_COLUMN_NAME + "=?", new String[] {ruleName});			
+		int result = db.delete(RuleEntry.RULE_TABLE_NAME, RuleEntry.RULE_COLUMN_NAME + "=?", new String[]{ruleName});
 		Log.i(logTag, "Deleted " + result + " entries.");
 		db.close();
 
-		//return the result
-		return c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_WIDGET_ID));
+		int wID = c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_WIDGET_ID));
+		c.close();
+		//return the wID
+		return wID;
 	}
 
 	// METHODS RELATED TO SMS TABLE //
@@ -659,6 +682,7 @@ public class DatabaseManager {
 			c.moveToNext();
 		}
 
+		c.close();
 		db.close();
 		return smsArray;
 	}
