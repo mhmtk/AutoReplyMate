@@ -22,10 +22,9 @@ import com.mhmt.autoreplymate.R;
 
 /**
  * @author Mehmet Kologlu
- * @version June 15, 2015
+ * @version June 17, 2015
  *
- * inspired by Satheesh's comment on
- * http://stackoverflow.com/questions/9450058/using-checkbox-to-filter-contacts-and-get-phone-number/10105655#10105655
+ *
  */
 public class ContactPicker extends ActionBarActivity {
 
@@ -92,7 +91,7 @@ public class ContactPicker extends ActionBarActivity {
 
     /**
      * Called when the done actionbar button is selected.
-     * Finishes the activity with the selected phoneNoes as the extra of the result intent
+     * Finishes the activity with the selected phoneNos as the extra of the result intent
      */
     private void doneSelected(){
         checked = listView.getCheckedItemPositions();
@@ -103,11 +102,10 @@ public class ContactPicker extends ActionBarActivity {
                 selectedContacts.add(no.replaceAll("[()\\-\\s]", ""));
                 //you can you this array list to next activity
                       /* do whatever you want with the checked item */
-                Log.i(logTag, "input: " + phoneNos[i] + " output: " + selectedContacts.get(0));
             }
+        // Put the array as an extra and finisha ctivity
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("selected_contacts", selectedContacts);
-
         Intent contactIntent = new Intent();
         contactIntent.putExtras(bundle);
         setResult(RESULT_OK, contactIntent);

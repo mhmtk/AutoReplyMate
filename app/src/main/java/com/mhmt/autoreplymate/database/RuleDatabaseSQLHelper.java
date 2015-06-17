@@ -14,7 +14,7 @@ import android.util.Log;
 /**
  *
  * @author Mehmet Kologlu
- * @version November June 15, 2015
+ * @version November June 17, 2015
  *
  */
 public class RuleDatabaseSQLHelper extends SQLiteOpenHelper{
@@ -93,8 +93,8 @@ public class RuleDatabaseSQLHelper extends SQLiteOpenHelper{
 				db.execSQL("ALTER TABLE " + RuleEntry.RULE_TABLE_NAME + " ADD COLUMN " + RuleEntry.RULE_COLUMN_EXCLUDE + TEXT_TYPE);
 				Log.i(logTag, "Updated db from 1 to 2");
 			} catch (SQLException e) {
-				e.printStackTrace();
 				Log.i(logTag, "Updated failed");
+				e.printStackTrace();
 			}
 		}
 	}
