@@ -29,14 +29,18 @@ import com.mhmt.autoreplymate.R;
 public class ContactPicker extends ActionBarActivity {
 
     static ContentResolver cr;
-    String[] phoneNos; //array holding phonenos, from which the selected ones go into selectedContacts
+    ArrayList<String> phoneNos; //array holding phone nos, from which the selected ones go into selectedContacts
     String[] listContacts; //array holding Strings that will be displayed in the listview
     Button selectButton;
     Activity thisActivity;
     String logTag = "ContactPicker";
 
+
     SparseBooleanArray checked;
     ListView listView;
+
+    private static String incomingExtraTag = "selected_contacts";
+    private static String outgoingExtraTag = "selected_contacts_string";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,9 @@ public class ContactPicker extends ActionBarActivity {
 
         listView = (ListView)findViewById(R.id.contactpicker_contactsList);
 
+        // TODO progress bar
+
+        long startTime = System.nanoTime();
         // store contacts + nos in listContacts
         getContactList();
 
@@ -53,6 +60,19 @@ public class ContactPicker extends ActionBarActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, listContacts);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        if (getIntent().hasExtra(incomingExtraTag)) { // if opened from an edit
+            String[] savedNos = getIntent().getStringExtra(incomingExtraTag).split(","); // get already existing nos
+            for (int i = 0; i < savedNos.length; i++) { //  look thru already existing nos
+                int n = phoneNos.indexOf(savedNos[i]);
+                if (n != -1) { //                           if they exist in the current contacts list
+                    listView.setItemChecked(n, true);//     check their corresponding checkbox
+                }
+            }
+
+            long endTime = System.nanoTime();
+            Log.i(logTag, "population took " + (endTime - startTime) + " secs");
+        }
 
     }
 
@@ -67,7 +87,7 @@ public class ContactPicker extends ActionBarActivity {
                 null, null, // all rows
                 ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC"  // sort by ascending name
         );
-        phoneNos = new String[cursor.getCount()];
+        phoneNos = new ArrayList<String>(cursor.getCount());
         listContacts = new String[cursor.getCount()];
 
         int i =0;
@@ -76,11 +96,11 @@ public class ContactPicker extends ActionBarActivity {
             do
             {
                 String phoneNo = cursor.getString(cursor
-                        .getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                phoneNos[i] = phoneNo;
+                        .getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)); // get phone no in raw format
+                phoneNos.add(i, phoneNo.replaceAll("[()\\-\\s]", "")); // Trim from extra chars then add into phone no arraylist
                 listContacts[i] = cursor.getString(cursor
                         .getColumnIndexOrThrow(ContactsContract.Data.DISPLAY_NAME)) + "\n" +
-                        phoneNo;
+                        phoneNo; // name \n raw phone no
                 i++;
             }
             while(cursor.moveToNext());
@@ -98,9 +118,8 @@ public class ContactPicker extends ActionBarActivity {
         String selectedContactsString = "";
         for (int i = 0; i < listView.getCount(); i++)
             if (checked.get(i)) {
-                String no = phoneNos[i];
 //                selectedContacts.add(no.replaceAll("[()\\-\\s]", ""));
-                selectedContactsString += no.replaceAll("[()\\-\\s]", "") + ",";
+                selectedContactsString += phoneNos.get(i) + ",";
                 //you can you this array list to next activity
                       /* do whatever you want with the checked item */
             }
@@ -108,7 +127,7 @@ public class ContactPicker extends ActionBarActivity {
 //        Bundle bundle = new Bundle();
 //        bundle.putStringArrayList("selected_contacts", selectedContacts);
         Intent contactIntent = new Intent();
-        contactIntent.putExtra("selected_contacts_string", selectedContactsString);
+        contactIntent.putExtra(outgoingExtraTag, selectedContactsString);
 //        contactIntent.putExtras(bundle);
         setResult(RESULT_OK, contactIntent);
         thisActivity.finish();

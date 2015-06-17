@@ -55,6 +55,9 @@ public class AddEditRule extends ActionBarActivity {
 	String includeString = "";
 	String excludeString = "";
 
+	private static String outgoingExtraTag = "selected_contacts";
+	private static String incomingExtraTag = "selected_contacts_string";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,12 +88,20 @@ public class AddEditRule extends ActionBarActivity {
 
 	public void launchIncludeContactPicker(View view) {
 		// TODO pass info as extra in case of edit
+		Intent intent = new Intent(this, ContactPicker.class);
+		if (edit) {
+			intent.putExtra(outgoingExtraTag, includeString);
+		}
 		startActivityForResult(new Intent(this, ContactPicker.class), PICK_INCLUDE_CONTACT_REQUEST);
 	}
 
 	public void launchExcludeContactPicker(View view) {
 		// TODO pass info as extra in case of edit
-		startActivityForResult(new Intent(this, ContactPicker.class), PICK_EXCLUDE_CONTACT_REQUEST);
+		Intent intent = new Intent(this, ContactPicker.class);
+		if (edit) {
+			intent.putExtra(outgoingExtraTag, excludeString);
+		}
+		startActivityForResult(intent, PICK_EXCLUDE_CONTACT_REQUEST);
 	}
 
 	@Override
@@ -99,12 +110,12 @@ public class AddEditRule extends ActionBarActivity {
 			if(requestCode == PICK_INCLUDE_CONTACT_REQUEST) {
 				Log.i(logTag, "Returned with include requestCode");
 //				include = data.getStringArrayListExtra("selected_contacts");
-				includeString = data.getStringExtra("selected_contacts_string");
+				includeString = data.getStringExtra(incomingExtraTag);
 			}
 			else if(requestCode == PICK_EXCLUDE_CONTACT_REQUEST){
 				Log.i(logTag, "Returned with exlude requestcode");
 //				exclude = data.getStringArrayListExtra("selected_contacts");
-				excludeString = data.getStringExtra("selected_contacts_string");
+				excludeString = data.getStringExtra(incomingExtraTag);
 			} else
 				Log.e(logTag, "requestCode doesnt match any predefined one");
 		} else
