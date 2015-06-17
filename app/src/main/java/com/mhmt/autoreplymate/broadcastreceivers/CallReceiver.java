@@ -148,37 +148,36 @@ public class CallReceiver extends BroadcastReceiver{
 				}, muteDelay);
 			}
 		}
-	}
+		/**
+		 * Checks if the given no is in the contacts
+		 *
+		 * @param c Context
+		 * @param no The phone no to check for
+		 * @return True if the passed no is saved in the contacts, false otherwise
+		 */
+		private boolean inContacts(Context c, String no) {
+			Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(no));
+			//	    String name = "?";
 
-	/**
-	 * Checks if the given no is in the contacts
-	 * 
-	 * @param c Context 
-	 * @param no The phone no to check for
-	 * @return True if the passed no is saved in the contacts, false otherwise 
-	 */
-	private boolean inContacts(Context c, String no) {
-		Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(no));
-		//	    String name = "?";
+			ContentResolver contentResolver = c.getContentResolver();
+			Cursor contactLookup = contentResolver.query(uri,
+					new String[] {BaseColumns._ID }, //ContactsContract.PhoneLookup.DISPLAY_NAME }
+					null, null, null);
 
-		ContentResolver contentResolver = c.getContentResolver();
-		Cursor contactLookup = contentResolver.query(uri,
-				new String[] {BaseColumns._ID }, //ContactsContract.PhoneLookup.DISPLAY_NAME }
-				null, null, null);
-
-		if (contactLookup != null)
-		{
-			try {
-				if (contactLookup.getCount() > 0) {
-					Log.i(logTag, contactLookup.getCount() + " contact(s) found with the senders no");
-					return true;
-					//name = contactLookup.getString(contactLookup.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
-					//String contactId = contactLookup.getString(contactLookup.getColumnIndex(BaseColumns._ID));
+			if (contactLookup != null)
+			{
+				try {
+					if (contactLookup.getCount() > 0) {
+						Log.i(logTag, contactLookup.getCount() + " contact(s) found with the senders no");
+						return true;
+						//name = contactLookup.getString(contactLookup.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
+						//String contactId = contactLookup.getString(contactLookup.getColumnIndex(BaseColumns._ID));
+					}
+				} finally {
+					contactLookup.close();
 				}
-			} finally {
-				contactLookup.close();
 			}
+			return false;
 		}
-		return false;
 	}
 }
