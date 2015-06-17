@@ -99,7 +99,6 @@ public class AddEditRule extends ActionBarActivity {
 
 	public void launchExcludeContactPicker(View view) {
 		// Pass nos that are already selected to the contact picker
-		// TODO pass info as extra in case of edit
 		Intent intent = new Intent(this, ContactPicker.class);
 		intent.putExtra(outgoingExtraTag, excludeString);
 		startActivityForResult(intent, PICK_EXCLUDE_CONTACT_REQUEST);
