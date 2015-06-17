@@ -89,18 +89,14 @@ public class AddEditRule extends ActionBarActivity {
 	public void launchIncludeContactPicker(View view) {
 		// TODO pass info as extra in case of edit
 		Intent intent = new Intent(this, ContactPicker.class);
-		if (edit) {
-			intent.putExtra(outgoingExtraTag, includeString);
-		}
+		intent.putExtra(outgoingExtraTag, includeString);
 		startActivityForResult(intent, PICK_INCLUDE_CONTACT_REQUEST);
 	}
 
 	public void launchExcludeContactPicker(View view) {
 		// TODO pass info as extra in case of edit
 		Intent intent = new Intent(this, ContactPicker.class);
-		if (edit) {
-			intent.putExtra(outgoingExtraTag, excludeString);
-		}
+		intent.putExtra(outgoingExtraTag, excludeString);
 		startActivityForResult(intent, PICK_EXCLUDE_CONTACT_REQUEST);
 	}
 
