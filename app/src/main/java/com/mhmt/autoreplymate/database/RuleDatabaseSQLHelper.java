@@ -14,7 +14,7 @@ import android.util.Log;
 /**
  *
  * @author Mehmet Kologlu
- * @version November June 17, 2015
+ * @version June 17, 2015
  *
  */
 public class RuleDatabaseSQLHelper extends SQLiteOpenHelper{

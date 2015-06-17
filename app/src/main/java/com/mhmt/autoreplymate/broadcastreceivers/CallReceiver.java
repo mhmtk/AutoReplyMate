@@ -25,7 +25,7 @@ import android.widget.Toast;
 /**
  * 
  * @author Mehmet Kologlu
- * @version November May 29, 2015
+ * @version May 29, 2015
  * 
  */
 public class CallReceiver extends BroadcastReceiver{

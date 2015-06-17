@@ -10,7 +10,7 @@ import android.widget.TextView;
 /**
  * 
  * @author Mehmet Kologlu
- * @version November May 29, 2015
+ * @version May 29, 2015
  * 
  */
 public class Instructions extends ActionBarActivity {

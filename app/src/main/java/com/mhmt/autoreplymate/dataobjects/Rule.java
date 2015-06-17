@@ -4,7 +4,7 @@ package com.mhmt.autoreplymate.dataobjects;
 /**
  * 
  * @author Mehmet Kologlu
- * @version November May 29, 2015
+ * @version June 17, 2015
  * 
  */
 public class Rule {

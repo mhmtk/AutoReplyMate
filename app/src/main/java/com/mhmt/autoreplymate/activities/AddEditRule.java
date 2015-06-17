@@ -27,7 +27,7 @@ import java.util.ArrayList;
 /**
  * 
  * @author Mehmet Kologlu
- * @version November May 15, 2015
+ * @version June 17, 2015
  * 
  */
 public class AddEditRule extends ActionBarActivity {

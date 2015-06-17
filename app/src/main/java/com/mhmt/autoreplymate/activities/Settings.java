@@ -15,7 +15,7 @@ import android.widget.Spinner;
 /**
  * 
  * @author Mehmet Kologlu
- * @version November May 29, 2015
+ * @version May 29, 2015
  * 
  */
 public class Settings extends ActionBarActivity {

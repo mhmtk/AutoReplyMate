@@ -22,7 +22,7 @@ import android.widget.ToggleButton;
 /**
  * 
  * @author Mehmet Kologlu
- * @version November May 29, 2015
+ * @version May 29, 2015
  *  
  * Inspired by http://androidexample.com/How_To_Create_A_Custom_Listview_-_Android_Example/index.php?view=article_discription&aid=67&aaid=92
  */
@@ -108,7 +108,7 @@ public class RuleListViewAdapter extends BaseAdapter {
 		else
 		{
 			// Get the current Rule from the ArrayList
-			tempValue = ( Rule ) data.get( position );
+			tempValue = data.get( position );
 			tName = tempValue.getName();
 			tText = tempValue.getText();
 

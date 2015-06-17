@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * 
  * @author Mehmet Kologlu
- * @version November May 29, 2015
+ * @version May 29, 2015
  * 
  */
 public class SMSReceiver extends BroadcastReceiver{

@@ -16,7 +16,7 @@ import java.util.List;
  * An custom ArrayAdapter with the only difference as supporting HTML markdown when setting the text
  *
  * @author Mehmet Kologlu
- * @version November June 11, 2015
+ * @version June 11, 2015
  *
  */
 public class HTMLTextArrayAdapter<T> extends ArrayAdapter<T> {
