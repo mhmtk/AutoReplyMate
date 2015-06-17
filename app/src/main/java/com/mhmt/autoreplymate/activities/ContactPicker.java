@@ -31,7 +31,6 @@ public class ContactPicker extends ActionBarActivity {
     static ContentResolver cr;
     String[] phoneNos; //array holding phonenos, from which the selected ones go into selectedContacts
     String[] listContacts; //array holding Strings that will be displayed in the listview
-    ArrayList<String> selectedContacts = new ArrayList<String>(); //The ArrayList to be returned to parent activity
     Button selectButton;
     Activity thisActivity;
     String logTag = "ContactPicker";
@@ -95,19 +94,22 @@ public class ContactPicker extends ActionBarActivity {
      */
     private void doneSelected(){
         checked = listView.getCheckedItemPositions();
-
+        ArrayList<String> selectedContacts = new ArrayList<String>();
+        String selectedContactsString = "";
         for (int i = 0; i < listView.getCount(); i++)
             if (checked.get(i)) {
                 String no = phoneNos[i];
-                selectedContacts.add(no.replaceAll("[()\\-\\s]", ""));
+//                selectedContacts.add(no.replaceAll("[()\\-\\s]", ""));
+                selectedContactsString += no.replaceAll("[()\\-\\s]", "") + ",";
                 //you can you this array list to next activity
                       /* do whatever you want with the checked item */
             }
         // Put the array as an extra and finisha ctivity
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList("selected_contacts", selectedContacts);
+//        Bundle bundle = new Bundle();
+//        bundle.putStringArrayList("selected_contacts", selectedContacts);
         Intent contactIntent = new Intent();
-        contactIntent.putExtras(bundle);
+        contactIntent.putExtra("selected_contacts_string", selectedContactsString);
+//        contactIntent.putExtras(bundle);
         setResult(RESULT_OK, contactIntent);
         thisActivity.finish();
     }
