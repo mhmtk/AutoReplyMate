@@ -185,10 +185,9 @@ public class DatabaseManager {
 				RuleEntry.RULE_COLUMN_NAME,
 				RuleEntry.RULE_COLUMN_TEXT,
 				RuleEntry.RULE_COLUMN_ONLYCONTACTS,
+				RuleEntry.RULE_COLUMN_INCLUDE,
+				RuleEntry.RULE_COLUMN_EXCLUDE
 		};
-
-		//sort descending
-		//				String sortOrder = BaseColumns._ID + " DESC";
 
 		//create cursor with only entries with status = 1 (on)  and replyTo = 0 or 1
 		Cursor c = db.query(
@@ -212,8 +211,10 @@ public class DatabaseManager {
 		{ //add the rules to the ArrayList
 			ruleArray.add(new Rule(
 					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_NAME)),
+					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_TEXT)), // Text
 					c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_ONLYCONTACTS)), // OC
-					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_TEXT)) // Text
+					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_INCLUDE)), // inc
+					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_EXCLUDE)) // exc
 					));
 			c.moveToNext();
 		}
@@ -239,10 +240,9 @@ public class DatabaseManager {
 				RuleEntry.RULE_COLUMN_NAME,
 				RuleEntry.RULE_COLUMN_TEXT,
 				RuleEntry.RULE_COLUMN_ONLYCONTACTS,
+				RuleEntry.RULE_COLUMN_INCLUDE,
+				RuleEntry.RULE_COLUMN_EXCLUDE
 		};
-
-		//sort descending
-		//				String sortOrder = BaseColumns._ID + " DESC";
 
 		//create cursor with only entries with status = 1 (on) and replyTo = 0 or 2
 		Cursor c = db.query(
@@ -264,9 +264,11 @@ public class DatabaseManager {
 		while(!c.isAfterLast())
 		{ //add the rules to the ArrayList
 			ruleArray.add(new Rule(
-					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_NAME)), //name
-					c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_ONLYCONTACTS)), //onlyContacts
-					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_TEXT))
+					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_NAME)),
+					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_TEXT)), // Text
+					c.getInt(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_ONLYCONTACTS)), // OC
+					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_INCLUDE)), // inc
+					c.getString(c.getColumnIndexOrThrow(RuleEntry.RULE_COLUMN_EXCLUDE)) // exc
 					));
 			c.moveToNext();
 		}

@@ -19,6 +19,7 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -58,8 +59,20 @@ public class SMSReceiver extends BroadcastReceiver{
 				phoneNo = msg[i].getOriginatingAddress();
 
 			}
+
 			//REPLY			
-			final String pn = phoneNo;//re-create phone no string, to make it final 
+			final String pn = phoneNo;//re-create phone no string, to make it final
+
+			ArrayList<Rule> rules = dbManager.getEnabledSMSRules();
+			if (! inContacts(pn)) { 							// SMS received from a non-contact
+				for (int i = 0; i < rules.size(); i ++) {
+					if(rules.get(i).getOnlyContacts() == 1) { 	// remove contacts only rules
+						rules.remove(i);
+					}
+				}
+			}
+
+
 
 			new Handler().postDelayed(new Runnable() { //Handler/Runnable usage in order to delay the reply
 				public void run() {

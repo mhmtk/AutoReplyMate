@@ -106,19 +106,22 @@ public class Rule {
 	/**
 	 * Used by getEnabled***Rules() of the DBManager, creates a lightweight Rule object.
 	 * Parameter order is reversed to differentiate from Rule(String name, int status).
-	 * 
-	 * @param onlyContacts Should the rule only apply to contacts?
+	 *
+	 * @param name
 	 * @param text Reply text of the rule
+	 * @param onlyContacts Should the rule only apply to contacts?
+	 * @param include
+	 * @param exclude
 	 */
-	public Rule(String name, int onlyContacts, String text) {
+	public Rule(String name, String text, int onlyContacts, String include, String exclude) {
 		this.name = name;
 		this.description = "";
 		this.text = text;
 		this.onlyContacts = onlyContacts;
 		this.replyTo = -1;
 		this.status = -1;
-		this.include = "";
-		this.exclude = "";
+		this.include = include;
+		this.exclude = exclude;
 	}
 
 	public String getName() {
