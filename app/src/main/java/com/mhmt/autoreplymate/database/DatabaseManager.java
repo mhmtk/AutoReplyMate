@@ -173,7 +173,7 @@ public class DatabaseManager {
 	 * 
 	 * @return an ArrayList<Rule> of rules that are turned on (status == 1) and replyTo == SMS or Both (0 | 1)
 	 */
-	public ArrayList<Rule> getEnabledSMSRules(){		
+	public ArrayList<Rule> getEnabledSMSRules(String[] onlyContacts){
 		ruleArray = new ArrayList<Rule>();
 
 		//while (db != null && db.isOpen()) {Log.i(logTag, "waiting for DB");} // Wait until DB is closed to act on it
@@ -193,8 +193,10 @@ public class DatabaseManager {
 		Cursor c = db.query(
 				RuleEntry.RULE_TABLE_NAME,  		// The table to query
 				projection,							// The columns to return
-				RuleEntry.RULE_COLUMN_STATUS + "='1'  AND " + RuleEntry.RULE_COLUMN_REPLYTO + " IN (0, 1)",						// The columns for the WHERE clause
-				null,								// The values for the WHERE clause
+				RuleEntry.RULE_COLUMN_STATUS + "='1'  AND " +
+						RuleEntry.RULE_COLUMN_REPLYTO + " IN (0, 1) AND " +
+						RuleEntry.RULE_COLUMN_ONLYCONTACTS + "=?",	// The columns for the WHERE clause
+				onlyContacts,	// The values for the WHERE clause
 				null,			                    // don't group the rows
 				null,								// don't filter by row groups
 				null	            				// sort

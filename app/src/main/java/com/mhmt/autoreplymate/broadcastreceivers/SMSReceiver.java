@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * 
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 public class SMSReceiver extends BroadcastReceiver{
 
 	private static long delay = 2000; // 2 secs delay before responding
-	private String logTag = "SMSReceiver"; 
+	private String logTag = "SMSReceiver";
 	private SmsManager smsManager;
 	private Context context;
 	private DatabaseManager dbManager;
@@ -61,34 +63,69 @@ public class SMSReceiver extends BroadcastReceiver{
 			}
 
 			//REPLY			
-			final String pn = phoneNo;//re-create phone no string, to make it final
+			phoneNo = phoneNo.replaceAll("[()\\-\\s]", "");//re-create phone no string, to make it final
 
-			ArrayList<Rule> rules = dbManager.getEnabledSMSRules();
-			if (! inContacts(pn)) { 							// SMS received from a non-contact
-				for (int i = 0; i < rules.size(); i ++) {
-					if(rules.get(i).getOnlyContacts() == 1) { 	// remove contacts only rules
-						rules.remove(i);
+//			ArrayList<Rule> rules = dbManager.getEnabledSMSRules();
+//			if (! inContacts(pn)) { 							// SMS received from a non-contact
+//				for (int i = 0; i < rules.size(); i ++) {
+//					if(rules.get(i).getOnlyContacts() == 1) { 	// remove contacts only rules
+//						rules.remove(i);
+//					}
+//				}
+//			}
+/**
+			ArrayList<Rule> allRules;
+			if(! inContacts(phoneNo)){ //sender not in contacts
+				// Get only non-OC rules
+				allRules = dbManager.getEnabledSMSRules(new String[]{"0"});
+			} else { // sender in contacts
+				// Get all rules from DB
+				allRules = dbManager.getEnabledSMSRules(new String[] {"0", "1"});
+
+				HashMap<String, Integer> exHash = new HashMap<>();
+				HashMap<String, Integer> inHash = new HashMap<>();
+				ArrayList<Rule> incRules = new ArrayList<>();
+				// Iterate over all rules
+				for (int i=0; i<allRules.size(); i++) {
+					exHash.clear();
+					arrayToHash(exHash, allRules.get(i).getExclude().split(","));
+
+					if (! exHash.containsKey(phoneNo)) { // rule doesn;t exclude senders no
+						arrayToHash(inHash, allRules.get(i).getInclude().split(","));
+						if(inHash.containsKey(phoneNo)) { // rule includes senders no
+							incRules.add(allRules.get(i)); // add it to include array
+						}
+						if()
 					}
 				}
+ **/
+				// remove rules excluding sender's no
+				// include > OC > all
+				// priorities replyTo = SMS over replyTo = both
 			}
 
 
+//			new Handler().postDelayed(new Runnable() { //Handler/Runnable usage in order to delay the reply
+//				public void run() {
+//					smsManager = SmsManager.getDefault();
+//					for (Rule r : dbManager.getEnabledSMSRules()) { //Reply for each rule
+//						if (r.getOnlyContacts() == 1) { // Reply only if the sender no is in the contacts
+//							if (inContacts(pn)) { // Check if the sender is in the contacts
+//								sendSMS(r, pn);
+//							}
+//						}
+//						else {
+//							sendSMS(r, pn);
+//						}
+//					}
+//				}
+//			}, delay );
+//		}
+	}
 
-			new Handler().postDelayed(new Runnable() { //Handler/Runnable usage in order to delay the reply
-				public void run() {
-					smsManager = SmsManager.getDefault();
-					for (Rule r : dbManager.getEnabledSMSRules()) { //Reply for each rule
-						if (r.getOnlyContacts() == 1) { // Reply only if the sender no is in the contacts
-							if (inContacts(pn)) { // Check if the sender is in the contacts
-								sendSMS(r, pn);
-							}
-						}
-						else {
-							sendSMS(r, pn);
-						}
-					}
-				} 
-			}, delay );
+	private void arrayToHash(HashMap hm, String[] array) {
+		for (int i = 0; i < array.length; i++) {
+			hm.put(array[i], 0);
 		}
 	}
 
