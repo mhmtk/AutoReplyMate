@@ -15,14 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
  * 
@@ -35,6 +35,8 @@ public class AddEditRule extends ActionBarActivity {
 	static final int PICK_INCLUDE_CONTACT_REQUEST = 0;
 	static final int PICK_EXCLUDE_CONTACT_REQUEST = 1;
 
+	static final int CONTACT_FILTER_REQUEST = 2;
+
 	private String logTag = "AddEditRule";
 
 	private EditText editTextName;
@@ -44,6 +46,7 @@ public class AddEditRule extends ActionBarActivity {
 	private RadioGroup radioReplyTo;
 	private ProgressBar progressBar;
 	private LinearLayout fields;
+	private Switch switchContactsFilter;
 
 	private DatabaseManager dbManager;
 
@@ -52,6 +55,8 @@ public class AddEditRule extends ActionBarActivity {
 
 	String includeString;
 	String excludeString;
+
+	String filterString;
 
 	private static String outgoingExtraTag = "selected_contacts";
 	private static String incomingExtraTag = "selected_contacts_string";
@@ -74,10 +79,29 @@ public class AddEditRule extends ActionBarActivity {
 		checkBoxContacts = (CheckBox) findViewById(R.id.checkBox_contactsOnly);
 		radioReplyTo = (RadioGroup) findViewById(R.id.radio_replyTo);
 		progressBar = (ProgressBar) findViewById(R.id.addedit_progress_bar);
+		switchContactsFilter = (Switch) findViewById(R.id.switch_contactsFilter);
 		fields = (LinearLayout) findViewById(R.id.addRule_fields);
 
 		// For up navigation thru the action bar
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+		/*	Set onCheckedChangeListener to the ContactFilter switch
+		/	when turned on, launches contact picker
+		*/
+		switchContactsFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked) {
+					Intent intent = new Intent(getApplicationContext(), ContactPicker.class);
+					if (edit) {
+						intent.putExtra(filterString, outgoingExtraTag);
+					}
+					startActivityForResult(intent, CONTACT_FILTER_REQUEST);
+				}
+			}
+		});
+
 
 		// If this activity is launched with an editing intent, start the asynctask to populate the fields
 		Intent intent = getIntent();
@@ -108,7 +132,11 @@ public class AddEditRule extends ActionBarActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
-			if(requestCode == PICK_INCLUDE_CONTACT_REQUEST) {
+			if (requestCode == CONTACT_FILTER_REQUEST) {
+				Log.i(logTag, "Returned with contact filter request as requestCode");
+				filterString = data.getStringExtra(incomingExtraTag);
+			}
+			else if (requestCode == PICK_INCLUDE_CONTACT_REQUEST) {
 				Log.i(logTag, "Returned with include requestCode");
 				includeString = data.getStringExtra(incomingExtraTag);
 			}

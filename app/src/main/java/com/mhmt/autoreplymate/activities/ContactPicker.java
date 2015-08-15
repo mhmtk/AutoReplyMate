@@ -17,6 +17,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.widget.RadioGroup;
 
 import com.mhmt.autoreplymate.R;
 
@@ -38,9 +39,11 @@ public class ContactPicker extends ActionBarActivity {
 
     SparseBooleanArray checked;
     ListView listView;
+    RadioGroup radioFilterType;
 
     private static String incomingExtraTag = "selected_contacts";
     private static String outgoingExtraTag = "selected_contacts_string";
+    private static String outgoingFilterTypeTag = "contact_filter_type";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class ContactPicker extends ActionBarActivity {
         setResult(RESULT_CANCELED);
 
         listView = (ListView)findViewById(R.id.contactpicker_contactsList);
+        radioFilterType = (RadioGroup) findViewById(R.id.radioGroup_filterType);
 
         // TODO progress bar
 
@@ -76,7 +80,6 @@ public class ContactPicker extends ActionBarActivity {
             long endTime = System.nanoTime();
             Log.i(logTag, "population took " + (endTime - startTime) + " secs"); // TODO delete
         }
-
     }
 
     /**
@@ -116,6 +119,10 @@ public class ContactPicker extends ActionBarActivity {
      * Finishes the activity with the selected phoneNos as the extra of the result intent
      */
     private void doneSelected(){
+
+        // 0 = include / 1 = exclude
+        int filterType = radioFilterType.indexOfChild(findViewById(radioFilterType.getCheckedRadioButtonId()));
+
         checked = listView.getCheckedItemPositions();
         ArrayList<String> selectedContacts = new ArrayList<String>();
         String selectedContactsString = "";
@@ -125,6 +132,7 @@ public class ContactPicker extends ActionBarActivity {
             }
         // Put the array as an extra and finish activity
         Intent contactIntent = new Intent();
+        contactIntent.putExtra(outgoingFilterTypeTag, filterType);
         contactIntent.putExtra(outgoingExtraTag, selectedContactsString);
         setResult(RESULT_OK, contactIntent);
         thisActivity.finish();
